@@ -1,7 +1,7 @@
 // export const base_url= `http://${window.location.host}`;
 // export const websocket = `ws://${window.location.host}`;
-export const base_url= `https://smartroll.ldce.mnv-dev.live`;
-export const websocket = `wss://smartroll.ldce.mnv-dev.live`;
+export const base_url= `https://ea5b-2405-201-2024-b862-a240-d7c6-e920-c012.ngrok-free.app`;
+export const websocket = `wss://ea5b-2405-201-2024-b862-a240-d7c6-e920-c012.ngrok-free.app`;
 
 // const token = localStorage.getItem('accessToken')
 // const header = {
