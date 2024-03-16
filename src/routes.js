@@ -1,5 +1,6 @@
 import React from 'react'
 import LectureHistory from './views/teacher/LectureHistory'
+import AdditionalFeatures from './views/teacher/AdditionalFeatures'
 
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -10,6 +11,7 @@ const Timetable = React.lazy(() => import('./views/timetable/Timetable'))
 const Subject = React.lazy(() => import('./views/subject/Subject'))
 const Teacherview = React.lazy(() => import('./views/teacher/Teacherview'));
 const Addstudent = React.lazy(() => import('./views/student_controller/Addstudent'));
+const AttendanceHistory = React.lazy(() => import('./views/AttendanceHistory/AttendanceHistory'));
 const StudentDashboard =  React.lazy(() => import('./views/student_controller/StudentDashboard'))
 const Sessionmanage =  React.lazy(() => import('./views/teacher/Sessionmanage'))
 const Logout = React.lazy(()=> import('./views/pages/logout/Logout'))
@@ -80,10 +82,12 @@ const routes = [
   { path: '/timetable',name:'Timetable',element:Timetable},
   { path: '/subject',name:'Subject',element:Subject},
   { path: '/addstudent',name:'AddStudent',element:Addstudent},
+  { path: '/attendance-history',name:'attendance-history',element:AttendanceHistory},
   { path: '/teacher/dashboard',name:'Teacherview',element:Teacherview},
   { path: '/studentdashboard',name:'StudentDashboard',element:StudentDashboard}  ,
   { path: '/teacher/session',name:'Sessionmanage',element:Sessionmanage}  ,
-  { path: '/teacher/lectures/history',name:'LectureHistory',element:LectureHistory}  
+  { path: '/teacher/lectures/history',name:'LectureHistory',element:LectureHistory},
+  { path: '/teacher/lectures/additional-features',name:'LectureHistory',element:AdditionalFeatures}  
 ]
 
  export default routes;

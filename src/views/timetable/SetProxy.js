@@ -35,7 +35,7 @@ const SetProxy = ({ visible, setVisible, sechedule, lectureConfigs , schedule_li
             });
           });
           setVisible(!visible)
-           console.log(response.data.data)
+          //  console.log(response.data.data)
         }else{
           alert(response_obj.errorMessage.message)
         }

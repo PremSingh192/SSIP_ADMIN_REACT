@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import axios from 'axios'
@@ -17,7 +17,6 @@ const AppContent = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { accessToken, refreshToken, batches, accessTokenActive, profileDetails } = state
   const navigate = useNavigate();
-
 
   const loadBatches = async () => {
     const header = {
@@ -48,41 +47,45 @@ const AppContent = () => {
     }
   }, []);
   return (
-    <CContainer lg>
-      <Suspense fallback={<CSpinner color="primary" />}>
-        <Routes>
-          {routes.map((route, idx) => {
-            return (
-              route.element && (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  name={route.name}
-                  element={<route.element />}
-                />
+    <>
+    
+      <CContainer lg>
+        <Suspense fallback={<CSpinner color="primary" />}>
+          <Routes>
+            {routes.map((route, idx) => {
+              return (
+                route.element && (
+                  <Route
+                    key={idx}
+                    path={route.path}
+                    exact={route.exact}
+                    name={route.name}
+                    element={<route.element />}
+                  />
+                )
               )
-            )
-          })}
-          
-          {
-            (() => {
-              if (profileDetails.obj.profile.role === "admin") {
-                return <Route path="/" element={<Navigate to="dashboard" replace />} />;
-              } else if (profileDetails.obj.profile.role === "teacher") {
-                return <Route path="/" element={<Navigate to="teacher/dashboard" replace />} />;
-              }
-              else if (profileDetails.obj.profile.role === "student") {
-                return <Route path="/" element={<Navigate to="studentdashboard" replace />} />;
-              }
-            })()
-          }
-
-
-
-        </Routes>
-      </Suspense>
-    </CContainer>
+            })}
+            
+            {
+              (() => {
+                if (profileDetails.obj.profile.role === "admin") {
+                  return <Route path="/" element={<Navigate to="dashboard" replace />} />;
+                } else if (profileDetails.obj.profile.role === "teacher") {
+                  return <Route path="/" element={<Navigate to="teacher/dashboard" replace />} />;
+                }
+                else if (profileDetails.obj.profile.role === "student") {
+  
+                  return <Route path="/" element={<Navigate to="studentdashboard" replace />} />;
+                }
+              })()
+            }
+  
+  
+  
+          </Routes>
+        </Suspense>
+      </CContainer>
+    </>
   )
 }
 

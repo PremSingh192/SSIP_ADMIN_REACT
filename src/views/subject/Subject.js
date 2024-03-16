@@ -153,7 +153,7 @@ const Subject = () => {
                   <CFormSelect
                     aria-label="Default select example"
                     onChange={(e) => {
-                      console.log(e.target.value)
+                      // console.log(e.target.value)
                       load_semester(e.target.value)
                     }}
                   >

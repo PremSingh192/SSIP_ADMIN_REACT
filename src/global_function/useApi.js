@@ -8,16 +8,18 @@ import {base_url} from "src/base_url";
 const useAPI = () => {  
   const navigate = useNavigate()
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken , refreshToken , profileDetails, objectCount } = state
+  const { accessToken , refreshToken, loader_state } = state
 
   const StoredTokens = {
     accessToken,
     refreshToken
   }
   const CallAPI = async (tokens=StoredTokens,reqInstance, endpoint, method, headers, body = null, params = null) => {    
+    ctxDispatch({ type: 'LOADER_STATE', payload: true});
     headers['Authorization'] = `Bearer ${tokens.accessToken}`;    
     try {
       const response = await makeRequest(reqInstance, endpoint, method, headers, body, params);
+      ctxDispatch({ type: 'LOADER_STATE', payload: false});
       return { error: false, response };
     } catch (error) {            
         if (error.response && error.response.status === 401) {
@@ -37,9 +39,11 @@ const useAPI = () => {
             localStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
             navigate('/auth/sign-in/')
+            ctxDispatch({ type: 'LOADER_STATE', payload: false});
             return { error: true, result };
           }
         } else {
+          ctxDispatch({ type: 'LOADER_STATE', payload: false});
           return { error: true, errorMessage: error.response.data || 'Unknown error' };
         }      
     }

@@ -11,7 +11,7 @@ import LoadingBar from 'react-top-loading-bar';
 
 const DefaultLayout = () => {  
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { accessToken , refreshToken} = state
+  const { accessToken , refreshToken, loader_state} = state
   const [serverAvaibility,setServerAvaibility] = useState(false)
   const [_404,set404] = useState(true)
   const [accessTokenValid,setAccessTokenValid] = useState(false)
@@ -102,8 +102,11 @@ const checkServerAvaibility = async ()=> {
   if(accessToken && accessTokenValid){
     return (    
       <div>
-  <LoadingBar color={'#1f6feb'} progress={progress}
-      onLoaderFinished={() => setProgress(0)} />
+  {/* <LoadingBar color={'#1f6feb'} progress={progress}
+      onLoaderFinished={() => setProgress(0)} /> */}      
+      <div  className={!loader_state ? 'd-none' : ''} style={{backdropFilter: 'blur(5px)',height: '100vh', width: '100%', position: 'absolute',zIndex: 9999,top: 0, justifyContent: 'center', display: 'flex', alignItems: 'center', left: 0 }}>
+        <img className="animated-container" style={{height:'10vh'}} src='/svgs/loader.svg'></img>
+      </div>
         <AppSidebar />
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />

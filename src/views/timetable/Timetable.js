@@ -33,7 +33,7 @@ const Timetable = () => {
   const [proxy_lecture_slug,set_proxy_lecture_slug] = useState("")
 
   const load_semester = async (term_slug) => {
-    console.log(term_slug)
+    // console.log(term_slug)
     const header = {
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': true,

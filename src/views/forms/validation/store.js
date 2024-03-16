@@ -17,7 +17,10 @@ const initialState = {
   currentBatch: [],
   objectCount:[],
   role: "",
-  accessTokenActive:false
+  accessTokenActive:false,
+  loader_state: false
+
+
 };
 
 function reducer(state, action) {
@@ -83,6 +86,12 @@ function reducer(state, action) {
                   ...state,
                   role:action.payload
                 }
+      case 'LOADER_STATE':{
+          return{
+            ...state,
+            loader_state:action.payload
+          }
+      }
     default:
       return state;
   }

@@ -51,9 +51,9 @@ const CustomStyles = (set_divisions, semester_slug,set_divisionCount) => {
       if(response_obj.error == false){
         let response = response_obj.response
         let changeCount = {...objectCount}
-        console.log(objectCount)
+        // console.log(objectCount)
         changeCount.divisons += 1  
-        console.log(changeCount.divison)
+        // console.log(changeCount.divison)
         ctxDispatch({ type: 'GET_OBJECTS', payload: changeCount });
           set_divisions(prevArray => [...prevArray, response.data.data])
           set_divisionCount(preValue => preValue + 1);

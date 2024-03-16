@@ -10,7 +10,7 @@ import axios from 'axios'
 
 function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_list}) {
   const [StoredTokens,CallAPI] = useAPI()
-  console.log(lectureConfigs)
+  // console.log(lectureConfigs)
   const lectureForm = useRef()
   const { register, handleSubmit } = useForm();
   const handleFormSubmit = async (data) => {
@@ -35,7 +35,7 @@ function SetLecture({ visible, setVisible, sechedule, lectureConfigs , schedule_
           });
         });
         setVisible(!visible)
-         console.log(response.data.data)
+        //  console.log(response.data.data)
       }else{
         alert(response_obj.errorMessage.message)
       }

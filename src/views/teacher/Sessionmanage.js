@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
-
+import moment from 'moment';
 import {
   COffcanvas,
   COffcanvasBody,
@@ -40,8 +40,8 @@ const Sessionmanage = () => {
   useEffect(() => {
     if (navigator.geolocation) {
       function successCallback(position) {
-        console.log('Latitude:', position.coords.latitude);
-        console.log('Longitude:', position.coords.longitude);
+        // console.log('Latitude:', position.coords.latitude);
+        // console.log('Longitude:', position.coords.longitude);
       }
       function errorCallback(error) {
         console.error('Error getting location:', error.message);
@@ -92,16 +92,16 @@ const Sessionmanage = () => {
   useEffect(() => {
     if (ws.current) {
       ws.current.onopen = () => {
-        console.log('WebSocket connection established')
+        // console.log('WebSocket connection established')
       }
 
       ws.current.onclose = () => {
-        console.log('WebSocket connection closed')
+        // console.log('WebSocket connection closed')
       }
 
       ws.current.onmessage = (event) => {
         let data = JSON.parse(event.data)
-        console.log(data)
+        // console.log(data)
         if(data.message){
           if (data.message.action == 'attendance_marked') {
             setAttendances((prevArray) => [...prevArray, data.message.data])
@@ -136,7 +136,7 @@ const Sessionmanage = () => {
     event.preventDefault()
     try {
       if(!confirm("Are you sure you want to mark the attendance manually?"))return;
-      console.log(attendance_Slug)
+      // console.log(attendance_Slug)
       event.target.checked = "checked"
       event.target.disabled = true
       const axiosInstance = axios.create()
@@ -278,7 +278,7 @@ const Sessionmanage = () => {
                             <CTableHeaderCell colSpan={5}>L.D COLLEGE OF ENGINEERING</CTableHeaderCell>
                           </CTableRow>
                           <CTableRow aria-colspan={5}>
-                            <CTableHeaderCell colSpan={5}>Subject: {session_data.lecture.subject.subject_name} | DATE: {session_data.lecture.session.day}</CTableHeaderCell>
+                            <CTableHeaderCell colSpan={5}>Subject: {session_data.lecture.subject.subject_name} | DATE: {session_data.lecture.session.day} | TIME: {moment(session_data.lecture.start_time.slice(0, 5), 'HH:mm').format('h:mm A')} to {moment(session_data.lecture.end_time.slice(0, 5), 'HH:mm').format('h:mm A')}</CTableHeaderCell>
                           </CTableRow>
                           <CTableRow>
                             {/* <CTableHeaderCell>SR. NO</CTableHeaderCell> */}
@@ -336,7 +336,7 @@ const Sessionmanage = () => {
                                 </CTableDataCell>): (<CTableDataCell>
                                   <div className="text-success d-flex justify-content-center align-items-center">
                                   <input type="checkbox" onClick={(e)=>{ mark_student_attendance(e,item.slug)}}></input>
-                                    <p style={{visibility:'hidden'}}>F</p>
+                                    <p style={{visibility:'hidden'}}>A</p>
                                   </div>
                                 </CTableDataCell>)}
                               </CTableRow>

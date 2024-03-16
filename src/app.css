@@ -4,3 +4,17 @@ input[type="checkbox"]:disabled {
             border-color: #007bff; 
             color: #007bff;/* Change the border color when checked */
 }
+
+.animated-container {
+    backdrop-filter: blur(1px);        
+    animation: fadeInOut 2s infinite; /* Adjust the animation duration as needed */
+  }
+  
+  @keyframes fadeInOut {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }

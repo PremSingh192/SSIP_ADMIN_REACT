@@ -145,7 +145,7 @@ const Teacher = () => {
       let response = response_obj.response
       setTeacherlist(response.data.data)
     } else {
-      console.log(response_obj.errorMessage.message)
+      // console.log(response_obj.errorMessage.message)
     }
   }
 

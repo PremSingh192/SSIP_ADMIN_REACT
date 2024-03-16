@@ -18,6 +18,7 @@ import axios from 'axios'
 import '../../css/tailwind.css'
 import Subject from '../subject/Subject'
 import Session_history from './Session_history'
+import moment from 'moment';
 
 const LectureHistory = () => {
 const [StoredTokens, CallAPI] = useAPI()
@@ -27,6 +28,7 @@ const [FilterLecture,setFilterLecture] = useState(null)
 const [attendances, setAttendances] = useState(null)
 const [visible , setVisible] = useState(false)
 const [session_data, setSessionData] = useState(null)
+
 const load_subjects_of_teacher = async () => {
     const headers = {
       'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ const load_subjects_of_teacher = async () => {
   }
 
   const search_lecture = (day)=>{
-    console.log(day);
+    // console.log(day);
     const filteredData = lecture.filter(item => item.session.some(session => session.day === day));
     
     if(filteredData.length > 0) {
@@ -145,7 +147,7 @@ const load_subjects_of_teacher = async () => {
                     <div>
                       <div className='d-flex'>
                         <div>
-                          <CFormInput type="date" id="validationCustom01"  required  onChange={(e)=>{search_lecture(e.target.value)}}/>
+                          <input type="date" id="validationCustom01"  required  onChange={(e)=>{search_lecture(e.target.value)}}/>
                         </div>
                         <div className='mx-2'>  
                         </div>
@@ -162,21 +164,27 @@ const load_subjects_of_teacher = async () => {
                       <CTableRow>
                         <CTableHeaderCell>classroom</CTableHeaderCell>
                         <CTableHeaderCell>Lecture Type</CTableHeaderCell>
-                        <CTableHeaderCell>Day</CTableHeaderCell>
+                        <CTableHeaderCell>Date</CTableHeaderCell>
+                        <CTableHeaderCell>Time</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
                       {FilterLecture.map((lecture, index) => (
                         lecture.session.map((session,index)=>(
                           <CTableRow v-for="item in tableItems" key={index} onClick={(e) => get_session_data(session.session_id)}>
-                          <CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.8rem'}}>
                             <div>{lecture.classroom}</div>   
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.8rem'}}>
                             <div>{lecture.type.charAt(0).toUpperCase() + lecture.type.slice(1)}</div>   
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.6rem'}}>
                             <div>{session.day}</div>   
+                          </CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.5rem'}}>
+                            <span className='d-block'>{moment(lecture.start_time.slice(0, 5), 'HH:mm').format('h:mm A')} </span>
+                            <span className='d-block'>To</span> 
+                            <span className='d-block'>{moment(lecture.end_time.slice(0, 5), 'HH:mm').format('h:mm A')}</span>
                           </CTableDataCell>
                         </CTableRow>
                         ))
@@ -199,7 +207,7 @@ const load_subjects_of_teacher = async () => {
                     <div>
                       <div className='d-flex'>
                         <div>
-                          <CFormInput type="date" id="validationCustom01"  required  onChange={(e)=>{search_lecture(e.target.value)}}/>
+                          <input type="date" id="validationCustom01"  required  onChange={(e)=>{search_lecture(e.target.value)}}/>
                         </div>
                         <div className='mx-2'>
                         
@@ -214,9 +222,10 @@ const load_subjects_of_teacher = async () => {
                   <CTable align="middle" className="mb-0 border text-center" hover responsive>
                     <CTableHead color="light">
                       <CTableRow>
-                        <CTableHeaderCell>classroom</CTableHeaderCell>
-                        <CTableHeaderCell>Lecture Type</CTableHeaderCell>
-                        <CTableHeaderCell>Day</CTableHeaderCell>
+                        <CTableHeaderCell>Class</CTableHeaderCell>
+                        <CTableHeaderCell>Type</CTableHeaderCell>
+                        <CTableHeaderCell>Date</CTableHeaderCell>
+                        <CTableHeaderCell>Time</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -225,14 +234,19 @@ const load_subjects_of_teacher = async () => {
                       lecture.map((lecture, index) => (
                         lecture.session.map((session,index)=>(
                           <CTableRow v-for="item in tableItems" key={index} onClick={(e) => get_session_data(session.session_id)}>
-                          <CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.8rem'}}>
                             <div>{lecture.classroom}</div>   
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.8rem'}}>
                             <div>{lecture.type.charAt(0).toUpperCase() + lecture.type.slice(1)}</div>   
                           </CTableDataCell>
-                          <CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.6rem'}}>
                             <div>{session.day}</div>   
+                          </CTableDataCell>
+                          <CTableDataCell style={{fontSize:'0.5rem'}}>
+                            <span className='d-block'>{moment(lecture.start_time.slice(0, 5), 'HH:mm').format('h:mm A')} </span>
+                            <span className='d-block'>To</span> 
+                            <span className='d-block'>{moment(lecture.end_time.slice(0, 5), 'HH:mm').format('h:mm A')}</span>
                           </CTableDataCell>
                         </CTableRow>
                         )) 
@@ -242,7 +256,7 @@ const load_subjects_of_teacher = async () => {
                     ) 
                     :(
                       <CTableRow v-for="item in tableItems">
-                        <CTableDataCell colSpan={3}>
+                        <CTableDataCell colSpan={4}>
                           <div className='alert alert-primary w-100 my-2'>
                             <span className=''>No Lecture Sessions Are There for This Subject</span>
                           </div>
@@ -267,20 +281,11 @@ const load_subjects_of_teacher = async () => {
        } 
        
        {
-         !lecture && <div role="status" className="p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700">
-         <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2.5"></div>
-         <div className="w-48 h-2 mb-10 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-         <div className="flex items-baseline mt-4">
-             <div className="w-full bg-gray-200 rounded-t-lg h-72 dark:bg-gray-300"></div>
-             <div className="w-full h-56 ms-6 bg-gray-200 rounded-t-lg dark:bg-gray-300"></div>
-             <div className="w-full bg-gray-200 rounded-t-lg h-72 ms-6 dark:bg-gray-300"></div>
-             <div className="w-full h-64 ms-6 bg-gray-200 rounded-t-lg dark:bg-gray-300"></div>
-             <div className="w-full bg-gray-200 rounded-t-lg h-80 ms-6 dark:bg-gray-300"></div>
-             <div className="w-full bg-gray-200 rounded-t-lg h-72 ms-6 dark:bg-gray-300"></div>
-             <div className="w-full bg-gray-200 rounded-t-lg h-80 ms-6 dark:bg-gray-300"></div>
-             <div className="w-full bg-gray-200 rounded-t-lg h-80 ms-6 dark:bg-gray-300"></div>
-         </div>
-     </div>
+         !lecture &&<>
+            <div className='d-flex justify-content-center'>
+                <img style={{maxWidth:'70%',height:'auto'}} src='/svgs/lecturehistory.svg'></img>
+            </div>
+        </>
        }
         
     </>

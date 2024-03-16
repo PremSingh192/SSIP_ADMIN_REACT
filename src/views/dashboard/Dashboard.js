@@ -63,14 +63,14 @@ const Dashboard = () => {
   const chageSteps = (currentStep) =>{
       setsteps(currentStep)
   }
-  console.log(divisionCount)
+  // console.log(divisionCount)
   const progressExample = [
     { title: 'Terms', value: objectCount.terms, nextStep:'semester' },
     { title: 'Semester', value: objectCount.semesters, nextStep:'semester' },
     { title: 'divison', value: objectCount.divisons, nextStep:'subject' },
     { title: 'Batches', value: objectCount.batches, nextStep:'batch'},
   ]
-  console.log(objectCount)
+  // console.log(objectCount)
   return (
     <>
       <Breadcrumbnav currentStep={steps} chageSteps={chageSteps}></Breadcrumbnav>

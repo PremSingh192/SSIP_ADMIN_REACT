@@ -59,7 +59,7 @@ const CustomStyles = (division_slug,set_batches,setBatchCout) => {
         let response = response_obj.response        
         let changeSubjectCount = {...objectCount}
         changeSubjectCount.batches += 1      
-        console.log(changeSubjectCount)  
+        // console.log(changeSubjectCount)  
         ctxDispatch({ type: 'GET_OBJECTS', payload: changeSubjectCount })
         set_batches(prevArray => [...prevArray, response.data.data])
         setBatchCout(preValue => preValue + 1);

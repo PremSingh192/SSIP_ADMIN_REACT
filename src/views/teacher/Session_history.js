@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import moment from 'moment';
 import {
   COffcanvas,
   COffcanvasBody,
@@ -29,7 +30,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
     event.preventDefault()
     try {
       if(!confirm("Are you sure you want to mark the attendance manually?"))return;
-      console.log(attendance_Slug)
+      // console.log(attendance_Slug)
       event.target.checked = "checked"
       event.target.disabled = true
       const axiosInstance = axios.create()
@@ -113,6 +114,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
         <COffcanvasBody>
           <div className='w-100'>
             {tableRef.current ? (<DownloadTableExcel
+
               filename={`${session_data.lecture.subject.subject_name} - ${new Date(session_data.day).toLocaleString()}`}
               sheet="attendance"
               currentTableRef={tableRef.current}
@@ -131,7 +133,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
                       <CTableHeaderCell colSpan={5}>L.D COLLEGE OF ENGINEERING</CTableHeaderCell>
                     </CTableRow>
                     <CTableRow aria-colspan={5}>
-                      <CTableHeaderCell colSpan={5}>Subject: {session_data.lecture.subject.subject_name} | DATE: {session_data.day}</CTableHeaderCell>
+                      <CTableHeaderCell colSpan={5}>Subject: {session_data.lecture.subject.subject_name} | DATE: {session_data.day} | TIME: {moment(session_data.lecture.start_time.slice(0, 5), 'HH:mm').format('h:mm A')} to {moment(session_data.lecture.end_time.slice(0, 5), 'HH:mm').format('h:mm A')}</CTableHeaderCell>
                     </CTableRow>
                     <CTableRow>
                       {/* <CTableHeaderCell>SR. NO</CTableHeaderCell> */}
@@ -191,7 +193,7 @@ const Session_history = ({ visible, setVisible, attendances, session_data }) => 
                             <div className="text-success d-flex justify-content-center align-items-center">
                               {/* <CFormCheck onClick={(e) => { mark_student_attendanc(e, item.slug) }}>Mark Attendance</CFormCheck> */}
                               <input type="checkbox" onClick={(e)=>{ mark_student_attendance(e,item.slug)}}></input>
-                              <p style={{ visibility: 'hidden' }}>F</p>
+                              <p style={{ visibility: 'hidden' }}>A</p>
                             </div>
                           </CTableDataCell>)}
                         </CTableRow>

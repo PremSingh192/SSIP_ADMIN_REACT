@@ -58,6 +58,12 @@ const _nav = {
     },
     {
       component: CNavItem,
+      name: 'Attendance History',
+      to: '/attendance-history',
+      icon: <CIcon icon={cilCalendar} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
       name: 'Logout',
       to: '/logout',    
       icon: <CIcon icon={cilAccountLogout} customClassName="nav-icon" />,
@@ -75,6 +81,12 @@ const _nav = {
       component: CNavItem,
       name: 'LectureHistory',
       to: '/teacher/lectures/history',    
+      icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
+    },
+    {
+      component: CNavItem,
+      name: 'Additional Features',
+      to: '/teacher/lectures/additional-features',    
       icon: <CIcon icon={cilClock} customClassName="nav-icon" />,
     },
     {
