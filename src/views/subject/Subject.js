@@ -251,7 +251,7 @@ const Subject = () => {
                   <CTableRow>
                     <CTableHeaderCell>Subject Name</CTableHeaderCell>
                     <CTableHeaderCell>Subject Code</CTableHeaderCell>
-                    <CTableHeaderCell>Subject Credit</CTableHeaderCell>
+                    <CTableHeaderCell>Semester</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>                
                 <CTableBody>
@@ -260,11 +260,12 @@ const Subject = () => {
                       <CTableDataCell>
                         <div>{item.subject_name.charAt(0).toUpperCase() + item.subject_name.slice(1)}</div>
                       </CTableDataCell>
+                      
                       <CTableDataCell>
                         <div>{item.code}</div>
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div>{item.credit}</div>
+                      <div>{item.semester.no}</div>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

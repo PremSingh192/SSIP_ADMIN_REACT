@@ -38,9 +38,6 @@ import { showAlert } from 'src/global_function/GlobalFunctions'
 import Swal from 'sweetalert'
   const CustomStyles = (setTeacherlist) => {
   const [validated, setValidated] = useState(false)
-  const navigate = useNavigate()
-  const { state, dispatch: ctxDispatch } = useContext(Store)
-  const { accessToken, refreshToken, currentBatch } = state
   const [StoredTokens, CallAPI] = useAPI()
   const add_Teacher = async (body) => {
     const headers = {
@@ -64,7 +61,8 @@ import Swal from 'sweetalert'
       let response = response_obj.response
      
       setTeacherlist((prevArray) => [...prevArray, response.data.data])
-    } else {      
+    } else {  
+      alert(response_obj.errorMessage.message)    
     }
   }
 
@@ -84,10 +82,9 @@ import Swal from 'sweetalert'
     }
     
     const name = event.target.tname.value
-    const ph_no = event.target.tmobile.value
     const email = event.target.temail.value
     setValidated(true)
-    if (!name || !ph_no || !email) {
+    if (!name || !email) {
       
       alert("hello")
       
@@ -96,7 +93,6 @@ import Swal from 'sweetalert'
       const body = {
         name,
         email,
-        ph_no,
       }
       add_Teacher(body)
       showAlert('success', 'Teacher Added successfully...!')
@@ -116,17 +112,6 @@ import Swal from 'sweetalert'
         <CFormFeedback valid>Looks good!</CFormFeedback>
       </CCol>
       <CCol md={6}>
-        <CFormLabel htmlFor="validationCustom01">Teacher Moblie No</CFormLabel>
-        <CFormInput
-          type="tel"
-          id="validationCustom02"
-          name="tmobile"
-          pattern="[0-9]{10}"
-          required
-        />
-        <CFormFeedback valid>Looks good!</CFormFeedback>
-      </CCol>
-      <CCol md={12}>
         <CFormLabel htmlFor="validationCustom01">Teacher E-mail</CFormLabel>
         <CFormInput type="email" id="validationCustom02" name="temail" required />
         <CFormFeedback valid>Looks good!</CFormFeedback>
@@ -142,16 +127,11 @@ import Swal from 'sweetalert'
 
 const Teacher = () => {
   const [StoredTokens, CallAPI] = useAPI()
-  const [isModalOpen, setModalOpen] = useState(false)
   const [visible, setVisible] = useState(false)
   const [SelectedTeacher, setSelectedTeacher] = useState(null)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const [Teacherlist, setTeacherlist] = useState([])
 
-  const { state, dispatch: ctxDispatch } = useContext(Store)
-  const { accessToken, refreshToken } = state
   const load_teacher = async () => {
     const headers = {
       'Content-Type': 'application/json',
@@ -173,7 +153,6 @@ const Teacher = () => {
       load_teacher()
   }, [])
 
-  const checkboxOptions = ['Option 1', 'Option 2', 'Option 3']
 
   return (
     <>
@@ -199,7 +178,6 @@ const Teacher = () => {
                   <CTableRow>
                     <CTableHeaderCell>Name</CTableHeaderCell>
                     <CTableHeaderCell>E-mail</CTableHeaderCell>
-                    <CTableHeaderCell>Mobile No</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -213,9 +191,6 @@ const Teacher = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item.profile.email}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item.profile.ph_no}</div>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

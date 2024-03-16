@@ -1,0 +1,6 @@
+input[type="checkbox"]:disabled {
+            /* Add your styles for disabled state here */
+            background-color: #007bff; /* Change the background color when checked */
+            border-color: #007bff; 
+            color: #007bff;/* Change the border color when checked */
+}

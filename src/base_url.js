@@ -1,7 +1,9 @@
 // export const base_url= `http://${window.location.host}`;
 // export const websocket = `ws://${window.location.host}`;
-export const base_url= `https://ea5b-2405-201-2024-b862-a240-d7c6-e920-c012.ngrok-free.app`;
-export const websocket = `wss://ea5b-2405-201-2024-b862-a240-d7c6-e920-c012.ngrok-free.app`;
+// export const base_url= `${window.location.protocol}//${window.location.host}`;
+// export const websocket = `wss://${window.location.host}`;
+export const base_url= `http://localhost:8000`;
+export const websocket = `ws://localhost:8000`;
 
 // const token = localStorage.getItem('accessToken')
 // const header = {

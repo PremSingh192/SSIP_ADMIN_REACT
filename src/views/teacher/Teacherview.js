@@ -10,25 +10,18 @@ import {
   CToast,
   CToastHeader,
   CToastBody,
-  CAlert,
-  CTable,
-  CTableHead,
+  CAlert,  
 } from '@coreui/react'
 import axios from 'axios'
 import { useEffect } from 'react'
 import useAPI from 'src/global_function/useApi'
-import { Collapse } from '@coreui/coreui'
-import Sessionmanage from './Sessionmanage'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment';
 
 
 export default function Teacherview() {
 
-  // usestate to opne and close the model
-
-  const [visible , setVisible] = useState(false)
-  const [session_data,set_session_data] = useState(null)
+  // usestate to opne and close the model  
   const navigation = useNavigate()
 
   const [StoredTokens, CallAPI] = useAPI()
@@ -110,11 +103,20 @@ export default function Teacherview() {
                                                     key={index}
                                                     autohide={false}
                                                     visible={true}
-                                                    className="mt-2 w-100"
+                                                    className={`mb-3 mt-3 w-100 ${lecture.is_proxy ? "border-red-700" : ""}`}
                                                     
                                                   >
                                                     <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
-                                                      <div className="fw-bold mx-2 my-2">
+                                                    {lecture.is_proxy ? (
+                                              <div className={`w-100 fw-bold`}>
+                                              <small className='mx-2 my-2'>
+                                                {lecture.is_proxy ? "Proxied from ":""}
+                                                {lecture.link ? lecture.link.from_lecture.subject.subject_name : ""}
+                                              </small>
+                                              <hr className='w-100 my-2'></hr>
+                                              </div>
+                                            ):(null)}
+                                                      <div className="fw-bold mx-2">
                                                         {lecture.subject.subject_name.charAt(0).toUpperCase() + lecture.subject.subject_name.slice(1)}
                                                       </div>
                                                         <small className='mx-2 my-2'>

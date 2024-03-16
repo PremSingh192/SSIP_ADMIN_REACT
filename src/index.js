@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import { StoreProvider } from './views/forms/validation/store'
 
+
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <StoreProvider>

@@ -25,7 +25,8 @@ export default function Register(){
       const { refreshToken , set404 } = state;
 
       const SubmitRegister = (data) => {
-        if (confirm("Are you sure you want to save the details?") == true) {
+          const flag = confirm("Are you sure you want to save the details?")
+        if (flag == true) {
           if(data.enrollment != parseInt(data.enrollment)){
             return alert("please enter the valid enrollment numner ")
           }
@@ -70,9 +71,9 @@ export default function Register(){
     },[set404])    
 
   return (
-    <div className="h-screen bg-center bg-no-repeat sm:p-20 p-6" style={{background:'black'}}>
+    <div className="h-screen bg-center bg-no-repeat sm:p-10 p-2" style={{background:'black'}}>
       <section className="w-full h-full flex justify-center items-center rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-100" style={{backgroundImage:'url(/images/background2.jpg)'}}>
-      <div className="text-white sm:w-full">
+      <div className="text-white sm:w-full w-75">        
              
         <form className="max-w-sm mx-auto" onSubmit={handleSubmit(SubmitRegister)} autoComplete='off'>        
           <div className="relative border-b-2	border-slate-500 z-0 w-full mb-5 group">

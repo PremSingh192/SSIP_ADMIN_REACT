@@ -50,7 +50,8 @@
     "react-top-loading-bar": "^2.3.1",
     "redux": "4.2.1",
     "simplebar-react": "^2.4.3",
-    "sweetalert": "^2.1.2"
+    "sweetalert": "^2.1.2",
+    "tw-to-css": "0.0.12"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

@@ -8,13 +8,14 @@ import {
   CFormSelect,
   CToast,
   CToastBody,
-  CToastHeader,
+  CToastHeader,  
   CAlert,
 } from '@coreui/react'
 import axios from 'axios'
 import { useEffect } from 'react'
 import useAPI from 'src/global_function/useApi'
 import SetLecture from './SetLecture'
+import SetProxy from './SetProxy'
 
 const Timetable = () => {
 
@@ -28,6 +29,8 @@ const Timetable = () => {
   const [lectureConfigs, setLectureConfigs] = useState(null)
   const [schedules, set_sechedules] = useState(null)
   const [term, set_term] = useState(null)
+  const [proxy_visible,set_proxy_visible] = useState(false)
+  const [proxy_lecture_slug,set_proxy_lecture_slug] = useState("")
 
   const load_semester = async (term_slug) => {
     console.log(term_slug)
@@ -258,22 +261,39 @@ const Timetable = () => {
                               <CCardBody className=''>
                                 <CRow className="justify-content-center">
                                   {item.lectures.length > 0 ? (
-                                    item.lectures.map((lecture, index) => (
-                                      <CToast key={index} autohide={false} visible={true} className='mb-3 w-100'>
-                                        <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
-                                          <div className="fw-bold mx-2 my-2">
-                                            {lecture.subject.subject_name.charAt(0).toUpperCase() + lecture.subject.subject_name.slice(1)}
-                                          </div>
-                                          <small className='mx-2 my-2'>
-                                            {lecture.type.toUpperCase()}
-                                          </small>
-                                          <small className='mx-2 my-2'>
-                                            {lecture.start_time.slice(0, 5)} |{' '}
-                                            {lecture.end_time.slice(0, 5)}
-                                          </small>
-                                        </CToastHeader>
-                                        <CToastBody className='d-flex flex-row flex-wrap justify-content-center justify-content-md-between'><span className='mx-3'>Prof - {lecture.teacher.charAt(0).toUpperCase() + lecture.teacher.slice(1)} </span><span>batches - {lecture.batches.map((batch, index) => (<span key={index}>{batch.batch_name.toUpperCase()}{index < lecture.batches.length - 1 && ', '}</span>))} </span> <span className='mx-3'>{lecture.classroom.class_name.charAt(0).toUpperCase() + lecture.classroom.class_name.slice(1)}</span> </CToastBody>
-                                      </CToast>
+                                    item.lectures.map((lecture, index) => (                                      
+                                      <CToast key={index} autohide={false} visible={true} className={`mb-3 w-100 ${lecture.is_proxy ? "border-red-700" : ""}`}>                                        
+                                          <CToastHeader className="d-flex flex-wrap justify-content-sm-between justify-content-center">
+                                            {lecture.is_proxy ? (
+                                              <div className={`w-100 fw-bold mx-2 my-2`}>
+                                              <small className='mx-2 my-2'>
+                                                {lecture.is_proxy ? "Proxied from ":""}
+                                                {lecture.link ? lecture.link.from_lecture.subject.subject_name : ""}
+                                              </small>
+                                              <hr className='w-100 my-2'></hr>
+                                              </div>
+                                            ):(null)}
+                                            
+                                            <div className="fw-bold mx-2 my-2">
+                                              {lecture.subject.subject_name.charAt(0).toUpperCase() + lecture.subject.subject_name.slice(1)}
+                                            </div>
+                                            <small className='mx-2 my-2'>
+                                              {lecture.type.toUpperCase()}
+                                            </small>
+                                            <small className='mx-2 my-2'>
+                                              {lecture.start_time.slice(0, 5)} |{' '}
+                                              {lecture.end_time.slice(0, 5)}
+                                            </small>
+                                            
+                                          </CToastHeader>
+                                          <CToastBody className='d-flex flex-row flex-wrap justify-content-center justify-content-md-between'><span className='mx-3'>Prof - {lecture.teacher.charAt(0).toUpperCase() + lecture.teacher.slice(1)} </span><span>batches - {lecture.batches.map((batch, index) => (<span key={index}>{batch.batch_name.toUpperCase()}{index < lecture.batches.length - 1 && ', '}</span>))} </span> <span className='mx-3'>{lecture.classroom.class_name.charAt(0).toUpperCase() + lecture.classroom.class_name.slice(1)}</span> </CToastBody>
+                                          {!lecture.is_proxy && (<><hr className='w-100'></hr>
+                                              <div className='d-flex w-100 mb-3'>
+                                                <div className='w-100'>
+                                                  <button className='btn btn-outline-dark w-100 mt-3' onClick={(e)=>{showLectureModal(item);set_proxy_lecture_slug(lecture.slug); set_proxy_visible(true)}}>Add Proxy</button>  
+                                                </div>
+                                          </div></>)}
+                                      </CToast>                                      
                                     ))
                                   ) : (
                                     <CToast autohide={false} visible={true}>
@@ -311,6 +331,7 @@ const Timetable = () => {
         </CToast>
       )}
       {schedule && <SetLecture visible={visible} setVisible={setVisible} sechedule={schedule} lectureConfigs={lectureConfigs} schedule_list={set_sechedules} />}
+      {schedule && <SetProxy visible={proxy_visible} setVisible={set_proxy_visible}  sechedule={schedule} lectureConfigs={lectureConfigs} schedule_list={set_sechedules} proxy_lecture_slug={proxy_lecture_slug}></SetProxy>}
     </>
   )
 }

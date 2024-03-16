@@ -38,11 +38,26 @@ const Sessionmanage = () => {
   const [StoredTokens, CallAPI] = useAPI()
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      function successCallback(position) {
+        console.log('Latitude:', position.coords.latitude);
+        console.log('Longitude:', position.coords.longitude);
+      }
+      function errorCallback(error) {
+        console.error('Error getting location:', error.message);
+      }            
+      for (let i = 0; i < 5; i++) {            
+          navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { enableHighAccuracy: true, maximumAge: 0 });
+      }   
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
     if (lectureSlug) {
       const headers = {
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': true,
-      }
+      }          
+            
       const axiosInstance = axios.create()
       CallAPI(
         StoredTokens,
@@ -115,6 +130,66 @@ const Sessionmanage = () => {
             action:'end_session'
         }))
     }
+  }
+
+  const mark_student_attendance = async (event, attendance_Slug) => {
+    event.preventDefault()
+    try {
+      if(!confirm("Are you sure you want to mark the attendance manually?"))return;
+      console.log(attendance_Slug)
+      event.target.checked = "checked"
+      event.target.disabled = true
+      const axiosInstance = axios.create()
+      const headers = {
+        'Content-Type': "application/json",
+        'ngrok-skip-browser-warning': true
+      }
+      const body = {
+        "attendance_slug":attendance_Slug
+      }
+      const response_obj = await CallAPI(
+        StoredTokens,
+        axiosInstance,
+        `/manage/session/mark_attendance_for_absent_student/`,
+        'post',
+        headers,
+        body,
+        null,
+      )
+      if (response_obj.error === false) {
+        
+        const response = response_obj.response
+        const div_element = event.target.parentElement
+        const children = div_element.children
+        children[1].innerText = "P"
+        div_element.removeChild(children[0])
+        var svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        svgElement.setAttribute("width", "16");
+        svgElement.setAttribute("height", "16");
+        svgElement.setAttribute("fill", "currentColor");
+        svgElement.setAttribute("class", "mx-auto bi bi-patch-check");
+        svgElement.setAttribute("viewBox", "0 0 16 16");
+
+        var path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path1.setAttribute("fill-rule", "evenodd");
+        path1.setAttribute("d", "M10.354 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708 0");
+
+        var path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path2.setAttribute("d", "m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911z");
+
+        svgElement.appendChild(path1);
+        svgElement.appendChild(path2);
+        div_element.prepend(svgElement)
+      }
+      else{
+        alert(response_obj.errorMessage.message)
+      }
+    }
+    catch (error) {
+      alert(error.message)
+    }
+
   }
 
   return (
@@ -209,7 +284,7 @@ const Sessionmanage = () => {
                             {/* <CTableHeaderCell>SR. NO</CTableHeaderCell> */}
                             <CTableHeaderCell>Enrollment No</CTableHeaderCell>
                             <CTableHeaderCell>Student Name</CTableHeaderCell>
-                            <CTableHeaderCell>IP Addr</CTableHeaderCell>
+                            {/* <CTableHeaderCell>IP Addr</CTableHeaderCell> */}
                             <CTableHeaderCell>Batch</CTableHeaderCell>
                             <CTableHeaderCell>Status</CTableHeaderCell>
                           </CTableRow>
@@ -227,9 +302,9 @@ const Sessionmanage = () => {
                                 <CTableDataCell>
                                   <div>{item.student.profile.name ? item.student.profile.name: '-'}</div>
                                 </CTableDataCell>
-                                <CTableDataCell>
+                                {/* <CTableDataCell>
                                   <div>{item.marking_ip ? item.marking_ip : '-'}</div>
-                                </CTableDataCell>
+                                </CTableDataCell> */}
                                 <CTableDataCell>
                                 <div>
                                   {item.batches
@@ -241,7 +316,7 @@ const Sessionmanage = () => {
 
                                 </CTableDataCell>
                                 {item.is_present ? (<CTableDataCell>
-                                  <div className="text-success d-flex align-items-center justify-content-center">
+                                  <div className="text-success d-flex justify-content-center align-items-center">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       width="16"
@@ -259,11 +334,8 @@ const Sessionmanage = () => {
                                     <p style={{visibility:'hidden'}}>P</p>
                                   </div>
                                 </CTableDataCell>): (<CTableDataCell>
-                                  <div className="text-danger d-flex align-items-center justify-content-center">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-octagon" viewBox="0 0 16 16">
-                                    <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z"/>
-                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                                  </svg>
+                                  <div className="text-success d-flex justify-content-center align-items-center">
+                                  <input type="checkbox" onClick={(e)=>{ mark_student_attendance(e,item.slug)}}></input>
                                     <p style={{visibility:'hidden'}}>F</p>
                                   </div>
                                 </CTableDataCell>)}

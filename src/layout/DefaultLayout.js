@@ -28,18 +28,19 @@ const DefaultLayout = () => {
     axios.post(`${base_url}/auth/api/token/refresh/`,{
         "refresh":refreshToken
     },{headers:header})
-    .then((response)=>{        
+    .then((response)=>{
+        ctxDispatch({ type: 'ACCESS_TOKEN', payload: response.data.access});
+        ctxDispatch({ type: 'REFRESH_TOKEN', payload: response.data.refresh });
         localStorage.setItem('accessToken',response.data.access)
         localStorage.setItem('refreshToken',response.data.refresh)        
         const decoded = jwtDecode(response.data.access); 
         ctxDispatch({ type: 'SET_PROFILE', payload: decoded});
         setAccessTokenValid(true)
     })
-    .catch((error)=>{
-        alert(error.response.data.detail)
+    .catch((error)=>{        
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
-        navigate('/auth/login')
+        navigate('/login')
     })
 }
 
@@ -53,20 +54,17 @@ const checkAccessTokenAuthenticity = async (accessToken) => {
   axios.get(`${base_url}/check_token_authenticity/`,{headers:headers})
   .then((response)=>{
     if(response.data.data === true){
+      const decoded = jwtDecode(accessToken); 
+      ctxDispatch({ type: 'SET_PROFILE', payload: decoded});
       setAccessTokenValid(true)
-    }
-    else{
-      if(refreshToken){
-        expireToken(refreshToken)
-      }else{
-        navigate('/login')
-      }
-    }
+    }    
   })
   .catch((error)=>{        
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    navigate('/login')
+    if(refreshToken){
+      expireToken(refreshToken)
+    }else{
+      navigate('/login')
+    }
   })    
 }
 const checkServerAvaibility = async ()=> {
@@ -80,8 +78,6 @@ const checkServerAvaibility = async ()=> {
   .then((response)=>{
     setServerAvaibility(true)
     if(accessToken){
-      const decoded = jwtDecode(accessToken); 
-      ctxDispatch({ type: 'SET_PROFILE', payload: decoded});
       checkAccessTokenAuthenticity(accessToken)
     }else{
       navigate('/login')
